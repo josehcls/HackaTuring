@@ -1,0 +1,8 @@
+[Unit]
+Description=paracetaotimo socket
+
+[Socket]
+ListenStream=/run/paracetaotimo/socket
+
+[Install]
+WantedBy=sockets.target

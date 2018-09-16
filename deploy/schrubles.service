@@ -1,0 +1,18 @@
+[Unit]
+Description=Gunicorn instance to serve paracetaotimo
+Requires=paracetaotimo.socket
+After=network.target
+
+[Service]
+PIDFile=/run/paracetaotimo/pid
+User=paracetaotimo
+Group=www-data
+RuntimeDirectory=paracetaotimo
+WorkingDirectory=/home/paracetaotimo/paracetaotimo
+Environment="PATH=/home/paracetaotimo/.virtualenvs/paracetaotimo/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+ExecStart=/home/paracetaotimo/.virtualenvs/paracetaotimo/bin/gunicorn --timeout 0 --workers 3 --max-requests 0 --pid /run/paracetaotimo/pid --bind unix:/run/paracetaotimo/socket -m 007 wsgi:app --access-logfile /home/paracetaotimo/logs/gunicorn.access --error-logfile /home/paracetaotimo/logs/gunicorn.error
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
